@@ -1,465 +1,595 @@
 
 -- Use the database
-USE TeclogosHRMS;
-GO 
+USE TeclogosHRMS_DEV;
+GO
 
 -- FOREIGN KEY CONSTRAINTS - EMPLOYEES TABLE --
 
 ALTER TABLE Employees
 ADD CONSTRAINT FK_Employees_GenderType
 FOREIGN KEY (GenderTypeID) REFERENCES GenderType(ID);
-GO 
+GO
 
 ALTER TABLE Employees
 ADD CONSTRAINT FK_Employees_BloodGroup
 FOREIGN KEY (BloodGroupID) REFERENCES BloodGroup(ID);
-GO 
+GO
+
+ALTER TABLE Employees
+ADD CONSTRAINT FK_Employees_MaritalStatus
+FOREIGN KEY (MaritalStatusID) REFERENCES MaritalStatus(ID);
+GO
 
 ALTER TABLE Employees
 ADD CONSTRAINT FK_Employees_Department
 FOREIGN KEY (DepartmentID) REFERENCES Department(ID);
-GO 
+GO
 
 ALTER TABLE Employees
 ADD CONSTRAINT FK_Employees_Designation
 FOREIGN KEY (DesignationID) REFERENCES Designation(ID);
-GO 
+GO
 
 ALTER TABLE Employees
 ADD CONSTRAINT FK_Employees_ReportingManager
 FOREIGN KEY (ReportingManagerID) REFERENCES Employees(ID);
-GO 
+GO
 
 ALTER TABLE Employees
 ADD CONSTRAINT FK_Employees_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Employees
 ADD CONSTRAINT FK_Employees_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Employees
 ADD CONSTRAINT FK_Employees_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - GENDER TYPE TABLE --
 
 ALTER TABLE GenderType
 ADD CONSTRAINT FK_GenderType_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE GenderType
 ADD CONSTRAINT FK_GenderType_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE GenderType
 ADD CONSTRAINT FK_GenderType_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
--- FOREIGN KEY CONSTRAINTS - BLOODGROUP TABLE --
+-- FOREIGN KEY CONSTRAINTS - MARITAL STATUS TABLE --
 
+ALTER TABLE MaritalStatus
+ADD CONSTRAINT FK_MaritalStatus_CreatedBy
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE MaritalStatus
+ADD CONSTRAINT FK_MaritalStatus_ModifiedBy
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE MaritalStatus
+ADD CONSTRAINT FK_MaritalStatus_DeletedBy
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
+-- FOREIGN KEY CONSTRAINTS - BLOOD GROUP TABLE --
 
 ALTER TABLE BloodGroup
 ADD CONSTRAINT FK_BloodGroup_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE BloodGroup
 ADD CONSTRAINT FK_BloodGroup_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE BloodGroup
 ADD CONSTRAINT FK_BloodGroup_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
 -- FOREIGN KEY CONSTRAINTS - DEPARTMENT TABLE --
 
-
 ALTER TABLE Department
 ADD CONSTRAINT FK_Department_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Department
 ADD CONSTRAINT FK_Department_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Department
 ADD CONSTRAINT FK_Department_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
 -- FOREIGN KEY CONSTRAINTS - DESIGNATION TABLE --
 
-
 ALTER TABLE Designation
 ADD CONSTRAINT FK_Designation_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Designation
 ADD CONSTRAINT FK_Designation_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Designation
 ADD CONSTRAINT FK_Designation_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
 -- FOREIGN KEY CONSTRAINTS - SHIFTS TABLE --
 
-
 ALTER TABLE Shifts
 ADD CONSTRAINT FK_Shifts_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Shifts
 ADD CONSTRAINT FK_Shifts_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Shifts
 ADD CONSTRAINT FK_Shifts_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
 -- FOREIGN KEY CONSTRAINTS - RELATION TYPE TABLE --
 
-
 ALTER TABLE RelationType
 ADD CONSTRAINT FK_RelationType_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE RelationType
 ADD CONSTRAINT FK_RelationType_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE RelationType
 ADD CONSTRAINT FK_RelationType_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
 -- FOREIGN KEY CONSTRAINTS - IDENTIFIER TYPE TABLE --
 
 ALTER TABLE IdentifierType
 ADD CONSTRAINT FK_IdentifierType_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE IdentifierType
 ADD CONSTRAINT FK_IdentifierType_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE IdentifierType
 ADD CONSTRAINT FK_IdentifierType_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
+-- FOREIGN KEY CONSTRAINTS - LEAVE TYPE TABLE --
+
+ALTER TABLE LeaveType
+ADD CONSTRAINT FK_LeaveType_CreatedBy
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE LeaveType
+ADD CONSTRAINT FK_LeaveType_ModifiedBy
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE LeaveType
+ADD CONSTRAINT FK_LeaveType_DeletedBy
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - ROLES TABLE --
 
 ALTER TABLE Roles
 ADD CONSTRAINT FK_Roles_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Roles
 ADD CONSTRAINT FK_Roles_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Roles
 ADD CONSTRAINT FK_Roles_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - OFFICE HOLIDAYS TABLE --
 
 ALTER TABLE OfficeHolidays
 ADD CONSTRAINT FK_OfficeHolidays_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE OfficeHolidays
 ADD CONSTRAINT FK_OfficeHolidays_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE OfficeHolidays
 ADD CONSTRAINT FK_OfficeHolidays_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
--- FOREIGN KEY CONSTRAINTS - ATTENDACE TABLE --
+
+-- FOREIGN KEY CONSTRAINTS - ATTENDANCE TABLE --
 
 ALTER TABLE Attendance
-ADD CONSTRAINT FK_Attendance_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+ADD CONSTRAINT FK_Attendance_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Attendance
 ADD CONSTRAINT FK_Attendance_ShiftID
 FOREIGN KEY (ShiftID) REFERENCES Shifts(ID);
-GO 
+GO
 
 ALTER TABLE Attendance
 ADD CONSTRAINT FK_Attendance_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Attendance
 ADD CONSTRAINT FK_Attendance_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Attendance
 ADD CONSTRAINT FK_Attendance_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - WORK BREAK TABLE --
 
 ALTER TABLE WorkBreak
-ADD CONSTRAINT FK_WorkBreak_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+ADD CONSTRAINT FK_WorkBreak_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE WorkBreak
 ADD CONSTRAINT FK_WorkBreak_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE WorkBreak
 ADD CONSTRAINT FK_WorkBreak_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE WorkBreak
 ADD CONSTRAINT FK_WorkBreak_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - BANK DETAILS TABLE --
 
 ALTER TABLE BankDetails
-ADD CONSTRAINT FK_BankDetails_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+ADD CONSTRAINT FK_BankDetails_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE BankDetails
 ADD CONSTRAINT FK_BankDetails_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE BankDetails
 ADD CONSTRAINT FK_BankDetails_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE BankDetails
 ADD CONSTRAINT FK_BankDetails_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - FAMILY MEMBERS TABLE --
 
 ALTER TABLE FamilyMembers
-ADD CONSTRAINT FK_FamilyMembers_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+ADD CONSTRAINT FK_FamilyMembers_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE FamilyMembers
 ADD CONSTRAINT FK_FamilyMembers_RelationType
-FOREIGN KEY (RelationTypeId) REFERENCES RelationType(ID);
-GO 
-
-ALTER TABLE FamilyMembers
-ADD CONSTRAINT FK_FamilyMembers_GenderType
-FOREIGN KEY (GenderTypeID) REFERENCES GenderType(ID);
-GO 
+FOREIGN KEY (RelationTypeID) REFERENCES RelationType(ID);
+GO
 
 ALTER TABLE FamilyMembers
 ADD CONSTRAINT FK_FamilyMembers_BloodGroup
 FOREIGN KEY (BloodGroupID) REFERENCES BloodGroup(ID);
-GO 
+GO
 
 ALTER TABLE FamilyMembers
 ADD CONSTRAINT FK_FamilyMembers_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE FamilyMembers
 ADD CONSTRAINT FK_FamilyMembers_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE FamilyMembers
 ADD CONSTRAINT FK_FamilyMembers_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - IDENTIFIERS TABLE --
 
 ALTER TABLE Identifiers
-ADD CONSTRAINT FK_Identifiers_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+ADD CONSTRAINT FK_Identifiers_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Identifiers
 ADD CONSTRAINT FK_Identifiers_IdentifierType
-FOREIGN KEY (IdentifierTypeId) REFERENCES IdentifierType(ID);
-GO 
+FOREIGN KEY (IdentifierTypeID) REFERENCES IdentifierType(ID);
+GO
 
 ALTER TABLE Identifiers
 ADD CONSTRAINT FK_Identifiers_VerifiedBy
 FOREIGN KEY (VerifiedByID) REFERENCES Employees(ID);
-GO 
+GO
 
 ALTER TABLE Identifiers
 ADD CONSTRAINT FK_Identifiers_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Identifiers
 ADD CONSTRAINT FK_Identifiers_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE Identifiers
 ADD CONSTRAINT FK_Identifiers_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
--- FOREIGN KEY CONSTRAINTS - LEAVES TABLE --
 
-ALTER TABLE Leaves
-ADD CONSTRAINT FK_Leaves_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+-- FOREIGN KEY CONSTRAINTS - LEAVE REQUEST TABLE --
 
-ALTER TABLE Leaves
-ADD CONSTRAINT FK_Leaves_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+ALTER TABLE LeaveRequest
+ADD CONSTRAINT FK_LeaveRequest_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
-ALTER TABLE Leaves
-ADD CONSTRAINT FK_Leaves_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+ALTER TABLE LeaveRequest
+ADD CONSTRAINT FK_LeaveRequest_LeaveTypeID
+FOREIGN KEY (LeaveTypeID) REFERENCES LeaveType(ID);
+GO
 
-ALTER TABLE Leaves
-ADD CONSTRAINT FK_Leaves_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+ALTER TABLE LeaveRequest
+ADD CONSTRAINT FK_LeaveRequest_CreatedBy
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
--- FOREIGN KEY CONSTRAINTS - PFACCOUNT TABLE --
+ALTER TABLE LeaveRequest
+ADD CONSTRAINT FK_LeaveRequest_ModifiedBy
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE LeaveRequest
+ADD CONSTRAINT FK_LeaveRequest_DeletedBy
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
+
+-- FOREIGN KEY CONSTRAINTS - APPROVAL GROUP TABLE --
+
+ALTER TABLE ApprovalGroup
+ADD CONSTRAINT FK_ApprovalGroup_Department
+FOREIGN KEY (DepartmentID) REFERENCES Department(ID);
+GO
+
+ALTER TABLE ApprovalGroup
+ADD CONSTRAINT FK_ApprovalGroup_CreatedBy
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE ApprovalGroup
+ADD CONSTRAINT FK_ApprovalGroup_ModifiedBy
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE ApprovalGroup
+ADD CONSTRAINT FK_ApprovalGroup_DeletedBy
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
+
+-- FOREIGN KEY CONSTRAINTS - APPROVAL GROUP MEMBERS TABLE --
+
+ALTER TABLE ApprovalGroupMembers
+ADD CONSTRAINT FK_ApprovalGroupMembers_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE ApprovalGroupMembers
+ADD CONSTRAINT FK_ApprovalGroupMembers_ApprovalGroup
+FOREIGN KEY (ApprovalGroupID) REFERENCES ApprovalGroup(ID);
+GO
+
+ALTER TABLE ApprovalGroupMembers
+ADD CONSTRAINT FK_ApprovalGroupMembers_Role
+FOREIGN KEY (RoleID) REFERENCES Roles(ID);
+GO
+
+ALTER TABLE ApprovalGroupMembers
+ADD CONSTRAINT FK_ApprovalGroupMembers_CreatedBy
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE ApprovalGroupMembers
+ADD CONSTRAINT FK_ApprovalGroupMembers_ModifiedBy
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE ApprovalGroupMembers
+ADD CONSTRAINT FK_ApprovalGroupMembers_DeletedBy
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
+
+-- FOREIGN KEY CONSTRAINTS - LEAVE APPROVAL WORKFLOW TABLE --
+
+ALTER TABLE LeaveApprovalWorkflow
+ADD CONSTRAINT FK_LeaveApprovalWorkflow_LeaveRequest
+FOREIGN KEY (LeaveRequestID) REFERENCES LeaveRequest(ID);
+GO
+
+ALTER TABLE LeaveApprovalWorkflow
+ADD CONSTRAINT FK_LeaveApprovalWorkflow_ApprovalGroup
+FOREIGN KEY (ApprovalGroupID) REFERENCES ApprovalGroup(ID);
+GO
+
+ALTER TABLE LeaveApprovalWorkflow
+ADD CONSTRAINT FK_LeaveApprovalWorkflow_CreatedBy
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE LeaveApprovalWorkflow
+ADD CONSTRAINT FK_LeaveApprovalWorkflow_ModifiedBy
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE LeaveApprovalWorkflow
+ADD CONSTRAINT FK_LeaveApprovalWorkflow_DeletedBy
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
+
+-- FOREIGN KEY CONSTRAINTS - PF ACCOUNT TABLE --
 
 ALTER TABLE PFAccount
-ADD CONSTRAINT FK_PFAccount_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+ADD CONSTRAINT FK_PFAccount_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE PFAccount
 ADD CONSTRAINT FK_PFAccount_VerifiedBy
 FOREIGN KEY (VerifiedByID) REFERENCES Employees(ID);
-GO 
+GO
 
 ALTER TABLE PFAccount
 ADD CONSTRAINT FK_PFAccount_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE PFAccount
 ADD CONSTRAINT FK_PFAccount_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE PFAccount
 ADD CONSTRAINT FK_PFAccount_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
 
--- FOREIGN KEY CONSTRAINTS - EMP ROLE TABLE --
 
-ALTER TABLE EmpRole
-ADD CONSTRAINT FK_EmpRole_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+-- FOREIGN KEY CONSTRAINTS - EMPLOYEE ROLE TABLE --
 
-ALTER TABLE EmpRole
-ADD CONSTRAINT FK_EmpRole_RoleID
-FOREIGN KEY (RoleId) REFERENCES Roles(ID);
-GO 
+ALTER TABLE EmployeeRole
+ADD CONSTRAINT FK_EmployeeRole_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
-ALTER TABLE EmpRole
-ADD CONSTRAINT FK_EmpRole_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+ALTER TABLE EmployeeRole
+ADD CONSTRAINT FK_EmployeeRole_RoleID
+FOREIGN KEY (RoleID) REFERENCES Roles(ID);
+GO
 
-ALTER TABLE EmpRole
-ADD CONSTRAINT FK_EmpRole_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+ALTER TABLE EmployeeRole
+ADD CONSTRAINT FK_EmployeeRole_CreatedBy
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
-ALTER TABLE EmpRole
-ADD CONSTRAINT FK_EmpRole_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+ALTER TABLE EmployeeRole
+ADD CONSTRAINT FK_EmployeeRole_ModifiedBy
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE EmployeeRole
+ADD CONSTRAINT FK_EmployeeRole_DeletedBy
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - REFRESH TOKENS TABLE --
 
 ALTER TABLE RefreshTokens
-ADD CONSTRAINT FK_RefreshTokens_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+ADD CONSTRAINT FK_RefreshTokens_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE RefreshTokens
 ADD CONSTRAINT FK_RefreshTokens_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE RefreshTokens
 ADD CONSTRAINT FK_RefreshTokens_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE RefreshTokens
 ADD CONSTRAINT FK_RefreshTokens_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
 
 -- FOREIGN KEY CONSTRAINTS - AUTH MANAGER TABLE --
 
 ALTER TABLE AuthManager
-ADD CONSTRAINT FK_AuthManager_EmpID
-FOREIGN KEY (EmpID) REFERENCES Employees(ID);
-GO 
+ADD CONSTRAINT FK_AuthManager_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE AuthManager
 ADD CONSTRAINT FK_AuthManager_CreatedBy
-FOREIGN KEY (CreatedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE AuthManager
 ADD CONSTRAINT FK_AuthManager_ModifiedBy
-FOREIGN KEY (ModifiedById) REFERENCES Employees(ID);
-GO 
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
 
 ALTER TABLE AuthManager
 ADD CONSTRAINT FK_AuthManager_DeletedBy
-FOREIGN KEY (DeletedById) REFERENCES Employees(ID);
-GO 
-
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO

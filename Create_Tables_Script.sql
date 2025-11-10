@@ -1,553 +1,573 @@
 
--- Drop database if exists and create new
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'TeclogosHRMS')
-BEGIN
-    DROP DATABASE TeclogosHRMS;
-END
+USE master;
 GO
 
--- Create database
-CREATE DATABASE TeclogosHRMS;
+-- Force disconnect all users connected to the target DB
+ALTER DATABASE TeclogosHRMS_DEV SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+GO
+
+-- Drop the database
+DROP DATABASE IF EXISTS TeclogosHRMS_DEV;
+GO
+
+-- Recreate the database
+CREATE DATABASE TeclogosHRMS_DEV;
 GO
 
 -- Use the database
-USE TeclogosHRMS;
+USE TeclogosHRMS_DEV;
 GO
 
 -- TABLE 1: EMPLOYEES --
-IF OBJECT_ID('Employees', 'U') IS NOT NULL
-    DROP TABLE Employees;
-GO
 
-CREATE TABLE Employees (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Code NVARCHAR(20) NOT NULL UNIQUE,
-    FirstName NVARCHAR(100) NOT NULL,
-    MiddleName NVARCHAR(100) NULL,
-    LastName NVARCHAR(100) NOT NULL,
-    Email NVARCHAR(100) NULL,
-    MobileNumber NVARCHAR(15) NOT NULL,
-    Photo VARBINARY(MAX) NULL,
-    Location NVARCHAR(100) NULL,
-    Extension NVARCHAR(100) NULL,
-    ResidentialStatus NVARCHAR(100) NULL,
-    DOB DATE NULL,
-    PlaceOfBirth NVARCHAR(100) NULL,
-    GenderTypeID UNIQUEIDENTIFIER NULL,
-    BloodGroupID UNIQUEIDENTIFIER NULL,
-    MaritalStatus NVARCHAR(20) CHECK (MaritalStatus IN ('Single', 'Married', 'Divorced')) NULL,
-    MarriageDate DATE NULL,
-    Nationality NVARCHAR(50) NULL,
-    Religion NVARCHAR(50) NULL,
-    Caste NVARCHAR(50) NULL,
-    PhysicallyChallenged BIT DEFAULT 0,
-    InternationalEmp BIT DEFAULT 0,
-    HeightInCm DECIMAL(5,2) NULL,
-    WeightInKG DECIMAL(5,2) NULL,
-    IdentificationMark NVARCHAR(50) NULL,
-    Hobby NVARCHAR(50) NULL,
-    JoiningDate DATE NOT NULL,
-    DepartmentID UNIQUEIDENTIFIER NULL,
-    DesignationID UNIQUEIDENTIFIER NULL,
-    ReportingManagerID UNIQUEIDENTIFIER NULL,
+CREATE TABLE [Employees] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Code] NVARCHAR(20) NOT NULL UNIQUE,
+    [FirstName] NVARCHAR(100) NOT NULL,
+    [MiddleName] NVARCHAR(100) NULL,
+    [LastName] NVARCHAR(100) NOT NULL,
+    [Email] NVARCHAR(100) NULL,
+    [MobileNumber] NVARCHAR(15) NOT NULL,
+    [Extension] NVARCHAR(100) NULL,
+    [Photo] VARBINARY(MAX) NULL,
+    [ResidentialStatus] NVARCHAR(100) NULL,
+    [DOB] DATE NULL,
+    [PlaceOfBirth] NVARCHAR(100) NULL,
+    [GenderTypeID] UNIQUEIDENTIFIER NULL,
+    [BloodGroupID] UNIQUEIDENTIFIER NULL,
+    [MaritalStatusID] UNIQUEIDENTIFIER NULL,
+    [MarriageDate] DATE NULL,
+    [Nationality] NVARCHAR(50) NULL,
+    [Religion] NVARCHAR(50) NULL,
+    [Caste] NVARCHAR(50) NULL,
+    [PhysicallyChallenged] BIT DEFAULT 0,
+    [InternationalEmployee] BIT DEFAULT 0,
+    [HeightInCm] DECIMAL(5,2) NULL,
+    [WeightInKG] DECIMAL(5,2) NULL,
+    [IDentificationMark] NVARCHAR(50) NULL,
+    [Hobby] NVARCHAR(100) NULL,
+    [JoiningDate] DATE NOT NULL,
+    [DepartmentID] UNIQUEIDENTIFIER NULL,
+    [DesignationID] UNIQUEIDENTIFIER NULL,
+    [ReportingManagerID] UNIQUEIDENTIFIER NULL,
     
     -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
 );
 GO
 
 -- TABLE 2: GENDER TYPE --
 
-IF OBJECT_ID('GenderType', 'U') IS NOT NULL
-    DROP TABLE GenderType;
-GO
-
-CREATE TABLE GenderType (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(100) NOT NULL UNIQUE,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 3: BLOOD GROUP --
-
-IF OBJECT_ID('BloodGroup', 'U') IS NOT NULL
-    DROP TABLE BloodGroup;
-GO
-
-CREATE TABLE BloodGroup (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(100) NOT NULL UNIQUE,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 4: DEPARTMENT --
-
-IF OBJECT_ID('Department', 'U') IS NOT NULL
-    DROP TABLE Department;
-GO
-
-CREATE TABLE Department (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(100) NOT NULL UNIQUE,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 5: DESIGNATION --
-
-IF OBJECT_ID('Designation', 'U') IS NOT NULL
-    DROP TABLE Designation;
-GO
-
-CREATE TABLE Designation (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(100) NOT NULL UNIQUE,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 6: SHIFTS --
-
-IF OBJECT_ID('Shifts', 'U') IS NOT NULL
-    DROP TABLE Shifts;
-GO
-
-CREATE TABLE Shifts (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(100) NOT NULL UNIQUE,
-    StartTime TIME NOT NULL,
-    EndTime TIME NOT NULL,
-    BreakDuration TIME DEFAULT '01:00:00',
-    StandardHrs TIME DEFAULT '08:00:00',
-    LateThreshold TIME DEFAULT '00:15:00',
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 7: RELATION TYPE --
-
-IF OBJECT_ID('RelationType', 'U') IS NOT NULL
-    DROP TABLE RelationType;
-GO
-
-CREATE TABLE RelationType (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(100) NOT NULL UNIQUE,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 8: IDENTIFIER TYPE --
-
-IF OBJECT_ID('IdentifierType', 'U') IS NOT NULL
-    DROP TABLE IdentifierType;
-GO
-
-CREATE TABLE IdentifierType (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(100) NOT NULL UNIQUE,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 9: ROLES --
-
-IF OBJECT_ID('Roles', 'U') IS NOT NULL
-    DROP TABLE Roles;
-GO
-
-CREATE TABLE Roles (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(50) NOT NULL UNIQUE,
-    Description NVARCHAR(200) NULL,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 10: OFFICE HOLIDAYS --
-
-IF OBJECT_ID('OfficeHolidays', 'U') IS NOT NULL
-    DROP TABLE OfficeHolidays;
-GO
-
-CREATE TABLE OfficeHolidays (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    Name NVARCHAR(200) NOT NULL,
-    Date DATE NOT NULL,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 11: ATTENDANCE --
-
-IF OBJECT_ID('Attendance', 'U') IS NOT NULL
-    DROP TABLE Attendance;
-GO
-
-CREATE TABLE Attendance (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    ShiftID UNIQUEIDENTIFIER NOT NULL,
-    Date DATE NOT NULL,
-    InTime DATETIME2 NULL,
-    OutTime DATETIME2 NULL,
-    Duration TIME(0) NULL,
-    WorkHrs TIME(0) NULL,
-    OverTime TIME(0) NULL,
-    LateIn TIME(0) NULL,
-    EarlyOut TIME(0) NULL,
-    IsManualEntry BIT DEFAULT 0,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 12: WORK BREAK --
-
-IF OBJECT_ID('WorkBreak', 'U') IS NOT NULL
-    DROP TABLE WorkBreak;
-GO
-
-CREATE TABLE WorkBreak (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    Date DATE NOT NULL,
-    StartDateTime DATETIME2 NULL,
-    EndDateTime DATETIME2 NULL,
-    TotalDuration TIME(0) NULL,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 13: BANK DETAILS --
-
-IF OBJECT_ID('BankDetails', 'U') IS NOT NULL
-    DROP TABLE BankDetails;
-GO
-
-CREATE TABLE BankDetails (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    BankName NVARCHAR(100) NOT NULL,
-    AccountNumber NVARCHAR(20) NOT NULL,
-    Branch NVARCHAR(100) NULL,
-    IFSC NVARCHAR(11) NOT NULL,
-    AccountType NVARCHAR(50) NULL,
-    NameOnRecord NVARCHAR(200) NOT NULL,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 14: FAMILY MEMBERS --
-
-IF OBJECT_ID('FamilyMembers', 'U') IS NOT NULL
-    DROP TABLE FamilyMembers;
-GO
-
-CREATE TABLE FamilyMembers (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    RelationTypeId UNIQUEIDENTIFIER NOT NULL,
-    FirstName NVARCHAR(100) NOT NULL,
-    MiddleName NVARCHAR(100) NULL,
-    LastName NVARCHAR(100) NOT NULL,
-    MobileNumber NVARCHAR(15) NULL,
-    DOB DATE NULL,
-    GenderTypeID UNIQUEIDENTIFIER NULL,
-    BloodGroupID UNIQUEIDENTIFIER NULL,
-    Nationality NVARCHAR(50) NULL,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 15: IDENTIFIERS --
-
-IF OBJECT_ID('Identifiers', 'U') IS NOT NULL
-    DROP TABLE Identifiers;
-GO
-
-CREATE TABLE Identifiers (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    IdentifierTypeId UNIQUEIDENTIFIER NOT NULL,
-    Number NVARCHAR(50) NOT NULL,
-    IssuedDate DATE NULL,
-    ExpiryDate DATE NULL,
-    FileName NVARCHAR(100) NULL,
-    FilePath NVARCHAR(200) NULL,
-    Verified DATETIME2 NULL,
-    VerifiedByID UNIQUEIDENTIFIER NULL,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 16: LEAVES --
-
-IF OBJECT_ID('Leaves', 'U') IS NOT NULL
-    DROP TABLE Leaves;
-GO
-
-CREATE TABLE Leaves (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    LeaveType NVARCHAR(100) NOT NULL,
-    FromDate DATE NULL,
-    ToDate DATE NULL,
-    Reason NVARCHAR(500) NULL,
-    Status NVARCHAR(50) NOT NULL DEFAULT 'Pending',
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 17: PF ACCOUNT --
-
-IF OBJECT_ID('PFAccount', 'U') IS NOT NULL
-    DROP TABLE PFAccount;
-GO
-
-CREATE TABLE PFAccount (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    PFNumber NVARCHAR(20) NOT NULL,
-    UAN NVARCHAR(20) NOT NULL,
-    PFJoinDate DATE NULL,
-    KYCStatus NVARCHAR(50) NULL,
-    KYCDocument NVARCHAR(200) NULL,
-    Verified DATETIME2 NULL,
-    VerifiedByID UNIQUEIDENTIFIER NULL,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
-);
-GO
-
--- TABLE 18: EMPLOYEE ROLE --
-
-IF OBJECT_ID('EmpRole', 'U') IS NOT NULL
-    DROP TABLE EmpRole;
-GO
-
-CREATE TABLE EmpRole (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    RoleId UNIQUEIDENTIFIER NOT NULL,
-
-    -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL,
+CREATE TABLE [GenderType] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
     
-    UNIQUE(EmpID, RoleId)
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
 );
 GO
 
--- TABLE 19: REFRESH TOKENS --
+-- TABLE 3: MARITAL STATUS --
 
-IF OBJECT_ID('RefreshTokens', 'U') IS NOT NULL
-    DROP TABLE RefreshTokens;
+CREATE TABLE [MaritalStatus] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
+    
+       -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
 GO
 
-CREATE TABLE RefreshTokens (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL,
-    Token NVARCHAR(255) NOT NULL UNIQUE,
-    ExpiresAt DATETIME2 NOT NULL,
-    RevokedAt DATETIME2 NULL,
-    RevokedByIp NVARCHAR(45) NULL,
-    ReplacedToken NVARCHAR(255) NULL,
+-- TABLE 4: BLOOD GROUP --
+
+CREATE TABLE [BloodGroup] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 5: DEPARTMENT --
+
+CREATE TABLE [Department] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 6: DESIGNATION --
+
+CREATE TABLE [Designation] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 7: SHIFTS --
+
+CREATE TABLE [Shifts] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
+    [StartTime] TIME NOT NULL,
+    [EndTime] TIME NOT NULL,
+    [BreakDuration] TIME,
+    [StandardHrs] TIME,
+    [LateThreshold] TIME,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 8: RELATION TYPE --
+
+CREATE TABLE [RelationType] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 9: IDENTIFIER TYPE --
+
+CREATE TABLE [IdentifierType] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 10: LEAVE TYPE --
+
+CREATE TABLE [LeaveType] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(100) NOT NULL UNIQUE,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 11: ROLES --
+
+CREATE TABLE [Roles] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(50) NOT NULL UNIQUE,
+    [Description] NVARCHAR(200) NULL,
+       
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 12: OFFICE HOLIDAYS --
+
+CREATE TABLE [OfficeHolidays] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(200) NOT NULL,
+    [HolidayDate] DATE NOT NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 13: ATTENDANCE --
+
+CREATE TABLE [Attendance] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [ShiftID] UNIQUEIDENTIFIER NOT NULL,
+    [AttendanceDate] DATE NOT NULL,
+    [InTime] DATETIME2 NULL,
+    [OutTime] DATETIME2 NULL,
+    [Source] INT DEFAULT 0,
+    
+      -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 14: WORK BREAK --
+
+CREATE TABLE [WorkBreak] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [WorkBreakDate] DATE NOT NULL,
+    [StartDateTime] DATETIME2 NULL,
+    [EndDateTime] DATETIME2 NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 15: BANK DETAILS --
+
+CREATE TABLE [BankDetails] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [BankName] NVARCHAR(100) NOT NULL,
+    [Branch] NVARCHAR(100) NULL,
+    [IFSC] NVARCHAR(15) NOT NULL,
+    [MICR] NVARCHAR(15) NOT NULL,
+    [AccountType] NVARCHAR(50) NULL,
+    [AccountNumber] NVARCHAR(20) NOT NULL,
+    [NameAsPerRecord] NVARCHAR(200) NOT NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 16: FAMILY MEMBERS --
+
+CREATE TABLE [FamilyMembers] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [RelationTypeID] UNIQUEIDENTIFIER NOT NULL,
+    [FirstName] NVARCHAR(100) NOT NULL,
+    [MiddleName] NVARCHAR(100) NULL,
+    [LastName] NVARCHAR(100) NOT NULL,
+    [DOB] DATE NULL,
+    [MobileNumber] NVARCHAR(15) NULL,
+    [BloodGroupID] UNIQUEIDENTIFIER NULL,
+    [Nationality] NVARCHAR(50) NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 17: IDENTIFIERS --
+
+CREATE TABLE [Identifiers] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [IdentifierTypeID] UNIQUEIDENTIFIER NOT NULL,
+    [Number] NVARCHAR(50) NOT NULL,
+    [IssuedDate] DATE NULL,
+    [ExpiryDate] DATE NULL,
+    [FileName] NVARCHAR(100) NULL,
+    [FilePath] NVARCHAR(200) NULL,
+    [Verified] DATETIME2 NULL,
+    [VerifiedByID] UNIQUEIDENTIFIER NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 18: LEAVE REQUEST --
+
+CREATE TABLE [LeaveRequest] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [LeaveTypeID] UNIQUEIDENTIFIER NOT NULL,
+    [FromDate] DATE NULL,
+    [ToDate] DATE NULL,
+    [Reason] NVARCHAR(500) NULL, 
+    [Status] BIT NOT NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 19: APPROVAL GROUP --
+
+CREATE TABLE [ApprovalGroup] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [Name] NVARCHAR(150) NOT NULL UNIQUE,         
+    [Description] NVARCHAR(500) NULL,          
+    [TotalLevels] INT NOT NULL DEFAULT 1,      
+    [IsSequential] BIT NOT NULL DEFAULT 1,
+    [DepartmentID] UNIQUEIDENTIFIER NULL,  
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 20: APPROVAL GROUP MEMBERS --
+
+CREATE TABLE [ApprovalGroupMembers] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NULL,           
+    [ApprovalGroupID] UNIQUEIDENTIFIER NOT NULL, 
+    [RoleID] UNIQUEIDENTIFIER NULL,               
+    [Level] INT NOT NULL,                        
+    [IsMandatory] BIT DEFAULT 1,              
+    [CanDelegate] BIT DEFAULT 0,     
 
     -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
 );
 GO
 
--- TABLE 20: AUTH MANAGER --
 
-IF OBJECT_ID('AuthManager', 'U') IS NOT NULL
-    DROP TABLE AuthManager;
-GO
+-- TABLE 21: LEAVE APPROVAL WORKFLOW --
 
-CREATE TABLE AuthManager (
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    EmpID UNIQUEIDENTIFIER NOT NULL UNIQUE,
-    PasswordHash NVARCHAR(255) NOT NULL,
-    PasswordResetToken NVARCHAR(255) NULL,
-    PasswordResetTokenExpires DATETIME2 NULL,
-    LastLoginDate DATETIME2 NULL,
-    LoginAttempts INT DEFAULT 0,
-    AccountLockedUntil DATETIME2 NULL,
-
+CREATE TABLE [LeaveApprovalWorkflow] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [LeaveRequestID] UNIQUEIDENTIFIER NOT NULL,
+    [ApprovalGroupID] UNIQUEIDENTIFIER NOT NULL,
+    [ApprovalLevel] INT NOT NULL,
+    [ApprovedStatus] BIT NOT NULL,
+    [Remark] NVARCHAR(500) NULL, 
+    
     -- System audit columns
-    IsActive BIT DEFAULT 1,
-    IsDeleted BIT DEFAULT 0,
-    Created DATETIME2 DEFAULT SYSDATETIME(),
-    CreatedById UNIQUEIDENTIFIER NULL,
-    Modified DATETIME2 DEFAULT SYSDATETIME(),
-    ModifiedById UNIQUEIDENTIFIER NULL,
-    Deleted DATETIME2 NULL,
-    DeletedById UNIQUEIDENTIFIER NULL
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
 );
 GO
 
+-- TABLE 22: PF ACCOUNT --
+
+CREATE TABLE [PFAccount] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [PFNumber] NVARCHAR(20) NOT NULL,
+    [UAN] NVARCHAR(20) NOT NULL,
+    [PFJoinDate] DATE NULL,
+    [KYCStatus] NVARCHAR(50) NULL,
+    [KYCDocument] VARBINARY(MAX) NULL,
+    [Verified] DATETIME2 NULL,
+    [VerifiedByID] UNIQUEIDENTIFIER NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 23: EMPLOYEE ROLE --
+
+CREATE TABLE [EmployeeRole] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [RoleID] UNIQUEIDENTIFIER NOT NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 24: REFRESH TOKENS --
+
+CREATE TABLE [RefreshTokens] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [Token] NVARCHAR(255) NOT NULL UNIQUE,
+    [ExpiresAt] DATETIME2 NOT NULL,
+    [RevokedAt] DATETIME2 NULL,
+    [RevokedByIp] NVARCHAR(45) NULL,
+    [ReplacedToken] NVARCHAR(255) NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 25: AUTH MANAGER --
+
+CREATE TABLE [AuthManager] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL UNIQUE,
+    [PasswordHash] NVARCHAR(255) NOT NULL,
+    [PasswordResetToken] NVARCHAR(255) NULL,
+    [PasswordResetTokenExpires] DATETIME2 NULL,
+    [IsLoginOnHold] BIT NULL,
+    [LastLoginDate] DATETIME2 NULL,
+    [FailedLoginAttempts] INT,
+    [LastFailedLoginAttemptOn] DATETIME2 NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
