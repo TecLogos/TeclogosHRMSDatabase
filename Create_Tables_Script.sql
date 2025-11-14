@@ -1,5 +1,5 @@
 
-USE master;
+USE [master];
 GO
 
 -- Force disconnect all users connected to the target DB
@@ -12,6 +12,18 @@ GO
 
 -- Recreate the database
 CREATE DATABASE TeclogosHRMS_DEV;
+
+ALTER DATABASE TeclogosHRMS_DEV 
+MODIFY FILE (
+    NAME = 'TeclogosHRMS_DEV',
+    SIZE = 512MB                
+);
+
+ALTER DATABASE TeclogosHRMS_DEV 
+MODIFY FILE (
+    NAME = 'TeclogosHRMS_DEV_log',
+    SIZE = 256MB                  
+);
 GO
 
 -- Use the database
@@ -28,7 +40,7 @@ CREATE TABLE [Employees] (
     [LastName] NVARCHAR(100) NOT NULL,
     [Email] NVARCHAR(100) NULL,
     [MobileNumber] NVARCHAR(15) NOT NULL,
-    [Extension] NVARCHAR(100) NULL,
+    [Extension] NVARCHAR(20) NULL,
     [Photo] VARBINARY(MAX) NULL,
     [ResidentialStatus] NVARCHAR(100) NULL,
     [DOB] DATE NULL,
@@ -54,8 +66,8 @@ CREATE TABLE [Employees] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -72,8 +84,8 @@ CREATE TABLE [GenderType] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -90,8 +102,8 @@ CREATE TABLE [MaritalStatus] (
        -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -108,8 +120,8 @@ CREATE TABLE [BloodGroup] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -126,8 +138,8 @@ CREATE TABLE [Department] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -144,8 +156,8 @@ CREATE TABLE [Designation] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -167,8 +179,8 @@ CREATE TABLE [Shifts] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -176,7 +188,26 @@ CREATE TABLE [Shifts] (
 );
 GO
 
--- TABLE 8: RELATION TYPE --
+-- TABLE 8: EMPLOYEE SHIFTS --
+
+CREATE TABLE [EmployeeShifts] (
+    [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,
+    [ShiftID] UNIQUEIDENTIFIER NOT NULL,
+    
+    -- System audit columns
+    [IsActive] BIT DEFAULT 1,
+    [IsDeleted] BIT DEFAULT 0,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
+    [Modified] DATETIME2 NULL,
+    [ModifiedByID] UNIQUEIDENTIFIER NULL,
+    [Deleted] DATETIME2 NULL,
+    [DeletedByID] UNIQUEIDENTIFIER NULL
+);
+GO
+
+-- TABLE 9: RELATION TYPE --
 
 CREATE TABLE [RelationType] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -185,8 +216,8 @@ CREATE TABLE [RelationType] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -194,7 +225,7 @@ CREATE TABLE [RelationType] (
 );
 GO
 
--- TABLE 9: IDENTIFIER TYPE --
+-- TABLE 10: IDENTIFIER TYPE --
 
 CREATE TABLE [IdentifierType] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -203,8 +234,8 @@ CREATE TABLE [IdentifierType] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -212,7 +243,7 @@ CREATE TABLE [IdentifierType] (
 );
 GO
 
--- TABLE 10: LEAVE TYPE --
+-- TABLE 11: LEAVE TYPE --
 
 CREATE TABLE [LeaveType] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -221,8 +252,8 @@ CREATE TABLE [LeaveType] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -230,7 +261,7 @@ CREATE TABLE [LeaveType] (
 );
 GO
 
--- TABLE 11: ROLES --
+-- TABLE 12: ROLES --
 
 CREATE TABLE [Roles] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -240,8 +271,8 @@ CREATE TABLE [Roles] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -249,7 +280,7 @@ CREATE TABLE [Roles] (
 );
 GO
 
--- TABLE 12: OFFICE HOLIDAYS --
+-- TABLE 13: OFFICE HOLIDAYS --
 
 CREATE TABLE [OfficeHolidays] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -259,8 +290,8 @@ CREATE TABLE [OfficeHolidays] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -268,7 +299,7 @@ CREATE TABLE [OfficeHolidays] (
 );
 GO
 
--- TABLE 13: ATTENDANCE --
+-- TABLE 14: ATTENDANCE --
 
 CREATE TABLE [Attendance] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -282,8 +313,8 @@ CREATE TABLE [Attendance] (
       -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -291,7 +322,7 @@ CREATE TABLE [Attendance] (
 );
 GO
 
--- TABLE 14: WORK BREAK --
+-- TABLE 15: WORK BREAK --
 
 CREATE TABLE [WorkBreak] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -303,8 +334,8 @@ CREATE TABLE [WorkBreak] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -312,7 +343,7 @@ CREATE TABLE [WorkBreak] (
 );
 GO
 
--- TABLE 15: BANK DETAILS --
+-- TABLE 16: BANK DETAILS --
 
 CREATE TABLE [BankDetails] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -328,8 +359,8 @@ CREATE TABLE [BankDetails] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -337,7 +368,7 @@ CREATE TABLE [BankDetails] (
 );
 GO
 
--- TABLE 16: FAMILY MEMBERS --
+-- TABLE 17: FAMILY MEMBERS --
 
 CREATE TABLE [FamilyMembers] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -354,8 +385,8 @@ CREATE TABLE [FamilyMembers] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -363,7 +394,7 @@ CREATE TABLE [FamilyMembers] (
 );
 GO
 
--- TABLE 17: IDENTIFIERS --
+-- TABLE 18: IDENTIFIERS --
 
 CREATE TABLE [Identifiers] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -380,8 +411,8 @@ CREATE TABLE [Identifiers] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -389,7 +420,7 @@ CREATE TABLE [Identifiers] (
 );
 GO
 
--- TABLE 18: LEAVE REQUEST --
+-- TABLE 19: LEAVE REQUEST --
 
 CREATE TABLE [LeaveRequest] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -403,8 +434,8 @@ CREATE TABLE [LeaveRequest] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -412,21 +443,19 @@ CREATE TABLE [LeaveRequest] (
 );
 GO
 
--- TABLE 19: APPROVAL GROUP --
+-- TABLE 20: EMPLOYEE GROUP --
 
-CREATE TABLE [ApprovalGroup] (
+CREATE TABLE [EmployeeGroup] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     [Name] NVARCHAR(150) NOT NULL UNIQUE,         
     [Description] NVARCHAR(500) NULL,          
-    [TotalLevels] INT NOT NULL DEFAULT 1,      
-    [IsSequential] BIT NOT NULL DEFAULT 1,
-    [DepartmentID] UNIQUEIDENTIFIER NULL,  
+     
     
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -434,22 +463,19 @@ CREATE TABLE [ApprovalGroup] (
 );
 GO
 
--- TABLE 20: APPROVAL GROUP MEMBERS --
+-- TABLE 21: EMPLOYEE GROUP DETAIL--
 
-CREATE TABLE [ApprovalGroupMembers] (
+CREATE TABLE [EmployeeGroupDetail] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    [EmployeeID] UNIQUEIDENTIFIER NULL,           
-    [ApprovalGroupID] UNIQUEIDENTIFIER NOT NULL, 
-    [RoleID] UNIQUEIDENTIFIER NULL,               
-    [Level] INT NOT NULL,                        
-    [IsMandatory] BIT DEFAULT 1,              
-    [CanDelegate] BIT DEFAULT 0,     
-
+    [EmployeeGroupID] UNIQUEIDENTIFIER NOT NULL,
+    [EmployeeID] UNIQUEIDENTIFIER NOT NULL,       
+     
+    
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -458,21 +484,22 @@ CREATE TABLE [ApprovalGroupMembers] (
 GO
 
 
--- TABLE 21: LEAVE APPROVAL WORKFLOW --
+-- TABLE 22: LEAVE APPROVAL WORKFLOW --
 
 CREATE TABLE [LeaveApprovalWorkflow] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     [LeaveRequestID] UNIQUEIDENTIFIER NOT NULL,
-    [ApprovalGroupID] UNIQUEIDENTIFIER NOT NULL,
-    [ApprovalLevel] INT NOT NULL,
+    [ApproverEmployeeGroupID] UNIQUEIDENTIFIER NOT NULL,
+    [ApprovalLevel] NVARCHAR(50) NOT NULL,
+    [ApprovalLevelOrder] INT NOT NULL,
     [ApprovedStatus] BIT NOT NULL,
     [Remark] NVARCHAR(500) NULL, 
     
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -480,7 +507,7 @@ CREATE TABLE [LeaveApprovalWorkflow] (
 );
 GO
 
--- TABLE 22: PF ACCOUNT --
+-- TABLE 23: PF ACCOUNT --
 
 CREATE TABLE [PFAccount] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -496,8 +523,8 @@ CREATE TABLE [PFAccount] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -505,7 +532,8 @@ CREATE TABLE [PFAccount] (
 );
 GO
 
--- TABLE 23: EMPLOYEE ROLE --
+
+-- TABLE 24: EMPLOYEE ROLE --
 
 CREATE TABLE [EmployeeRole] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -515,8 +543,8 @@ CREATE TABLE [EmployeeRole] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -524,7 +552,7 @@ CREATE TABLE [EmployeeRole] (
 );
 GO
 
--- TABLE 24: REFRESH TOKENS --
+-- TABLE 25: REFRESH TOKENS --
 
 CREATE TABLE [RefreshTokens] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -538,8 +566,8 @@ CREATE TABLE [RefreshTokens] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
@@ -547,7 +575,7 @@ CREATE TABLE [RefreshTokens] (
 );
 GO
 
--- TABLE 25: AUTH MANAGER --
+-- TABLE 26: AUTH MANAGER --
 
 CREATE TABLE [AuthManager] (
     [ID] UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -563,11 +591,14 @@ CREATE TABLE [AuthManager] (
     -- System audit columns
     [IsActive] BIT DEFAULT 1,
     [IsDeleted] BIT DEFAULT 0,
-    [Created] DATETIME2 DEFAULT GETUTCDATE(),
-    [CreatedByID] UNIQUEIDENTIFIER NULL,
+    [Created] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedByID] UNIQUEIDENTIFIER NOT NULL,
     [Modified] DATETIME2 NULL,
     [ModifiedByID] UNIQUEIDENTIFIER NULL,
     [Deleted] DATETIME2 NULL,
     [DeletedByID] UNIQUEIDENTIFIER NULL
 );
+GO
+
+USE [master];
 GO

@@ -153,6 +153,35 @@ ADD CONSTRAINT FK_Shifts_DeletedBy
 FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
 GO
 
+
+-- FOREIGN KEY CONSTRAINTS - EMPLOYEE SHIFTS TABLE --
+
+ALTER TABLE EmployeeShifts
+ADD CONSTRAINT FK_EmployeeShifts_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE EmployeeShifts
+ADD CONSTRAINT FK_EmployeeShifts_ShiftID
+FOREIGN KEY (ShiftID) REFERENCES Shifts(ID);
+GO
+
+ALTER TABLE EmployeeShifts
+ADD CONSTRAINT FK_EmployeeShifts_CreatedBy
+FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE EmployeeShifts
+ADD CONSTRAINT FK_EmployeeShifts_ModifiedBy
+FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
+GO
+
+ALTER TABLE EmployeeShifts
+ADD CONSTRAINT FK_EmployeeShifts_DeletedBy
+FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
+GO
+
+
 -- FOREIGN KEY CONSTRAINTS - RELATION TYPE TABLE --
 
 ALTER TABLE RelationType
@@ -409,58 +438,47 @@ FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
 GO
 
 
--- FOREIGN KEY CONSTRAINTS - APPROVAL GROUP TABLE --
+-- FOREIGN KEY CONSTRAINTS - EMPLOYEE GROUP TABLE --
 
-ALTER TABLE ApprovalGroup
-ADD CONSTRAINT FK_ApprovalGroup_Department
-FOREIGN KEY (DepartmentID) REFERENCES Department(ID);
-GO
-
-ALTER TABLE ApprovalGroup
-ADD CONSTRAINT FK_ApprovalGroup_CreatedBy
+ALTER TABLE EmployeeGroup
+ADD CONSTRAINT FK_EmployeeGroup_CreatedBy
 FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
 GO
 
-ALTER TABLE ApprovalGroup
-ADD CONSTRAINT FK_ApprovalGroup_ModifiedBy
+ALTER TABLE EmployeeGroup
+ADD CONSTRAINT FK_EmployeeGroup_ModifiedBy
 FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
 GO
 
-ALTER TABLE ApprovalGroup
-ADD CONSTRAINT FK_ApprovalGroup_DeletedBy
+ALTER TABLE EmployeeGroup
+ADD CONSTRAINT FK_EmployeeGroup_DeletedBy
 FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
 GO
 
+-- FOREIGN KEY CONSTRAINTS - EMPLOYEE GROUP DETAIL TABLE --
 
--- FOREIGN KEY CONSTRAINTS - APPROVAL GROUP MEMBERS TABLE --
+ALTER TABLE EmployeeGroupDetail
+ADD CONSTRAINT FK_EmployeeGroupDetail_EmployeeGroup
+FOREIGN KEY (EmployeeGroupID) REFERENCES EmployeeGroup(ID);
+GO
 
-ALTER TABLE ApprovalGroupMembers
-ADD CONSTRAINT FK_ApprovalGroupMembers_EmployeeID
+ALTER TABLE EmployeeGroupDetail
+ADD CONSTRAINT FK_EmployeeGroupDetail_Employee
 FOREIGN KEY (EmployeeID) REFERENCES Employees(ID);
 GO
 
-ALTER TABLE ApprovalGroupMembers
-ADD CONSTRAINT FK_ApprovalGroupMembers_ApprovalGroup
-FOREIGN KEY (ApprovalGroupID) REFERENCES ApprovalGroup(ID);
-GO
-
-ALTER TABLE ApprovalGroupMembers
-ADD CONSTRAINT FK_ApprovalGroupMembers_Role
-FOREIGN KEY (RoleID) REFERENCES Roles(ID);
-GO
-
-ALTER TABLE ApprovalGroupMembers
-ADD CONSTRAINT FK_ApprovalGroupMembers_CreatedBy
+ALTER TABLE EmployeeGroupDetail
+ADD CONSTRAINT FK_EmployeeGroupDetail_CreatedBy
 FOREIGN KEY (CreatedByID) REFERENCES Employees(ID);
 GO
 
-ALTER TABLE ApprovalGroupMembers
-ADD CONSTRAINT FK_ApprovalGroupMembers_ModifiedBy
+ALTER TABLE EmployeeGroup
+ADD CONSTRAINT FK_EmployeeGroupDetail_ModifiedBy
 FOREIGN KEY (ModifiedByID) REFERENCES Employees(ID);
 GO
 
-ALTER TABLE ApprovalGroupMembers
-ADD CONSTRAINT FK_ApprovalGroupMembers_DeletedBy
+ALTER TABLE EmployeeGroup
+ADD CONSTRAINT FK_EmployeeGroupDetail_DeletedBy
 FOREIGN KEY (DeletedByID) REFERENCES Employees(ID);
 GO
 
@@ -473,8 +491,8 @@ FOREIGN KEY (LeaveRequestID) REFERENCES LeaveRequest(ID);
 GO
 
 ALTER TABLE LeaveApprovalWorkflow
-ADD CONSTRAINT FK_LeaveApprovalWorkflow_ApprovalGroup
-FOREIGN KEY (ApprovalGroupID) REFERENCES ApprovalGroup(ID);
+ADD CONSTRAINT FK_LeaveApprovalWorkflow_ApproverEmployeeGroup
+FOREIGN KEY (ApproverEmployeeGroupID) REFERENCES EmployeeGroupDetail(ID);
 GO
 
 ALTER TABLE LeaveApprovalWorkflow
