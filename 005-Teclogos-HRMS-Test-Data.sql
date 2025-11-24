@@ -6,9 +6,9 @@ SET NOCOUNT ON;
 BEGIN TRANSACTION;
 
 BEGIN TRY
-    -- =============================================
+
     -- DECLARE VARIABLES
-    -- =============================================
+
     DECLARE @Counter INT = 1;
     DECLARE @TotalEmployees INT = 2000;
     
@@ -114,14 +114,14 @@ BEGIN TRY
     DECLARE @HasDesignation BIT;
     DECLARE @HasReportingManager BIT;
 
-    -- =============================================
+
     -- GET SYSTEM ADMIN ID
-    -- =============================================
+
     SELECT @SystemAdminID = ID FROM [Employees] WHERE Code = 'SYS0000';
 
-    -- =============================================
+
     -- RETRIEVE ALL LOOKUP TABLE IDs
-    -- =============================================
+
     SELECT @MaleID = ID FROM [GenderType] WHERE [Name] = 'Male';
     SELECT @FemaleID = ID FROM [GenderType] WHERE [Name] = 'Female';
     SELECT @SingleID = ID FROM [MaritalStatus] WHERE [Name] = 'Single';
@@ -176,9 +176,9 @@ BEGIN TRY
     IF @DrivingLicenseTypeID IS NULL SET @DrivingLicenseTypeID = @AadhaarTypeID;
     IF @PassportTypeID IS NULL SET @PassportTypeID = @AadhaarTypeID;
 
-    -- =============================================
+
     -- MAIN LOOP: INSERT 2000 EMPLOYEES
-    -- =============================================
+
     WHILE (@Counter <= @TotalEmployees)
     BEGIN
         SET @EmployeeID = NEWID();
@@ -207,6 +207,7 @@ BEGIN TRY
         SET @HasReportingManager = CAST(RAND() * 2 AS INT);
         
         -- Generate varied names
+
         SET @FirstName = CASE 
             WHEN @Counter % 10 = 0 THEN 'Rajesh'
             WHEN @Counter % 10 = 1 THEN 'Priya'
@@ -216,7 +217,6 @@ BEGIN TRY
             WHEN @Counter % 10 = 5 THEN 'Anaya'
             WHEN @Counter % 10 = 6 THEN 'Manish'
             WHEN @Counter % 10 = 7 THEN 'Sneha'
-            WHEN @Counter % 10 = 8 THEN 'Vikram'
             ELSE 'Pooja'
         END;
         
@@ -310,6 +310,7 @@ BEGIN TRY
             SET @ReportingManagerID = NULL;
 
         -- INSERT EMPLOYEE
+
         INSERT INTO [Employees] 
             ([ID], [Code], [FirstName], [MiddleName], [LastName], [Email], [MobileNumber], 
              [Extension], [ResidentialStatus], [DOB], [PlaceOfBirth], [GenderTypeID], [BloodGroupID], 
@@ -367,6 +368,7 @@ BEGIN TRY
              @DepartmentID, @DesignationID, @ReportingManagerID, @SystemAdminID);
 
         -- ATTENDANCE
+
         SET @IsAttendanceApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsAttendanceApplicable = 1)
@@ -403,6 +405,7 @@ BEGIN TRY
         END;
 
         -- WORKBREAK
+
         SET @IsWorkBreakApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsWorkBreakApplicable = 1)
@@ -420,6 +423,7 @@ BEGIN TRY
         END;
 
         -- BANK DETAILS
+
         SET @IsBankDetailsApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsBankDetailsApplicable = 1)
@@ -451,7 +455,8 @@ BEGIN TRY
                  @SystemAdminID);
         END;
 
-        -- FAMILY MEMBERS (NO POSTFIX)
+        -- FAMILY MEMBERS 
+
         SET @IsFamilyApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsFamilyApplicable = 1)
@@ -521,6 +526,7 @@ BEGIN TRY
         END;
 
         -- IDENTIFIERS
+
         SET @IsIdentifiersApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsIdentifiersApplicable = 1)
@@ -577,6 +583,7 @@ BEGIN TRY
         END;
 
         -- LEAVE REQUEST
+
         SET @IsLeaveRequestApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsLeaveRequestApplicable = 1)
@@ -609,6 +616,7 @@ BEGIN TRY
         END;
 
         -- PF ACCOUNT
+
         SET @IsPFAccountApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsPFAccountApplicable = 1)
@@ -634,6 +642,7 @@ BEGIN TRY
         END;
 
         -- EMPLOYEE SHIFT
+
         SET @IsEmployeeShiftApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsEmployeeShiftApplicable = 1)
@@ -651,6 +660,7 @@ BEGIN TRY
         END;
 
         -- EMPLOYEE ROLE
+
         SET @IsEmployeeRoleApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsEmployeeRoleApplicable = 1)
@@ -671,6 +681,7 @@ BEGIN TRY
         END;
 
         -- AUTH MANAGER
+
         SET @IsAuthManagerApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsAuthManagerApplicable = 1)
@@ -700,6 +711,7 @@ BEGIN TRY
         END;
 
         -- REFRESH TOKEN
+
         SET @IsRefreshTokenApplicable = CAST(RAND() * 2 AS INT);
         
         IF (@IsRefreshTokenApplicable = 1)

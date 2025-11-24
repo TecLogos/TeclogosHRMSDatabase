@@ -33,14 +33,13 @@ SELECT @SystemAdminID = ID FROM [Employees] WHERE Code = 'SYS0000';
 
 -- Insert Shifts
 
-    INSERT INTO [Shifts] ([ID], [Name], [StartTime], [EndTime], [BreakDuration], [StandardHrs], [LateThreshold], [CreatedByID]) 
+    INSERT INTO [Shifts] ([Name], [StartTime], [EndTime], [BreakDuration], [StandardHrs], [LateThreshold], [CreatedByID]) 
     VALUES  
-        (@SystemAdminID, 'General Shift', '09:30:00', '19:30:00', '01:00:00', '09:00:00', '00:15:00', @SystemAdminID),
-        (@SystemAdminID, 'Morning Shift', '06:00:00', '14:00:00', '00:45:00', '07:15:00', '00:10:00', @SystemAdminID),
-        (@SystemAdminID, 'Afternoon Shift', '14:00:00', '22:00:00', '00:45:00', '07:15:00', '00:10:00', @SystemAdminID),
-        (@SystemAdminID, 'Night Shift', '22:00:00', '06:00:00', '00:45:00', '07:15:00', '00:10:00', @SystemAdminID),
-        (@SystemAdminID, 'Half Day Shift', '09:00:00', '13:00:00', '00:15:00', '03:45:00', '00:10:00', @SystemAdminID),
-        (@SystemAdminID, 'Weekend Shift', '10:00:00', '16:00:00', '00:30:00', '05:30:00', '00:10:00', @SystemAdminID);
+        ('Morning Shift', '06:00:00', '14:00:00', '00:45:00', '07:15:00', '00:10:00', @SystemAdminID),
+        ('Afternoon Shift', '14:00:00', '22:00:00', '00:45:00', '07:15:00', '00:10:00', @SystemAdminID),
+        ('Night Shift', '22:00:00', '06:00:00', '00:45:00', '07:15:00', '00:10:00', @SystemAdminID),
+        ('Half Day Shift', '09:00:00', '13:00:00', '00:15:00', '03:45:00', '00:10:00', @SystemAdminID),
+        ('Weekend Shift', '10:00:00', '16:00:00', '00:30:00', '05:30:00', '00:10:00', @SystemAdminID);
 
 --  Insert Roles
     
